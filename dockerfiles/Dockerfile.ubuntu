@@ -51,6 +51,33 @@ RUN apt-get update -y && \
     tcpdump && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
+
+FROM ubuntu:22.04
+ENV DEBIAN_FRONTEND=noninteractive
+WORKDIR /opt
+# install openhip
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+    git \
+    ca-certificates \
+    automake \
+    make \
+    libtool \
+    pkg-config \
+    gawk \
+    g++ \
+    libssl-dev \
+    libxml2-dev \
+    && \
+    git clone https://bitbucket.org/openhip/openhip.git && \
+    cd openhip && \
+    ./bootstrap.sh && \
+    ./configure && \
+    make && \
+    sudo make install && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
 # install core
 ARG CORE_VERSION=9.2.0
 ARG CORE_PACKAGE=core_${CORE_VERSION}_amd64.deb
